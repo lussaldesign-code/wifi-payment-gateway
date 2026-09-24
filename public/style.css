@@ -5,3 +5,58 @@
 .nav nav a:active{transform:scale(.95)}
 @keyframes navPulse{0%{box-shadow:0 0 0 0 #35b7ff00}50%{box-shadow:0 0 0 5px #35b7ff18}100%{box-shadow:0 0 0 0 #35b7ff00}}
 .nav nav a.nav-pressed:after{animation:navPulse .18s ease}
+
+/* Sliding navigation indicator */
+.nav nav{
+  position:relative;
+  padding:7px;
+  gap:8px;
+  border:1px solid #ffffff0b;
+  border-radius:14px;
+  background:#ffffff04;
+}
+.nav nav::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:var(--nav-indicator-x,7px);
+  top:7px;
+  width:var(--nav-indicator-w,0px);
+  height:calc(100% - 14px);
+  border-radius:10px;
+  background:linear-gradient(120deg,#168cff22,#704dff22);
+  border:1px solid #3aaaff30;
+  box-shadow:0 0 22px #218cff18;
+  transition:left .42s cubic-bezier(.22,.9,.28,1),width .42s cubic-bezier(.22,.9,.28,1);
+  pointer-events:none;
+}
+.nav nav a{
+  z-index:1;
+  padding:11px 15px;
+  border-radius:10px;
+  transition:color .2s ease,transform .22s ease;
+}
+.nav nav a.active{
+  color:#fff;
+}
+.nav nav a.active:after{
+  bottom:4px;
+  left:18%;
+  right:18%;
+  height:2px;
+  border-radius:99px;
+  transition:left .35s ease,right .35s ease;
+}
+.nav nav a.nav-pressed{
+  transform:translateY(-2px) scale(.96);
+}
+@media(max-width:900px){
+  .menu-open nav{
+    padding:20px 25px;
+    border:0;
+    border-radius:0;
+    background:#071228;
+  }
+  .menu-open nav::before{display:none}
+  .menu-open nav a{padding:0}
+}
