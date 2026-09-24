@@ -1,1 +1,65 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WiFiPay — Internet Payment</title><link rel="stylesheet" href="/style.css"></head><body><div class="orb one"></div><div class="orb two"></div><main><header><div class="brand">WIFI<span>PAY</span></div><div class="badge">PAYMENT GATEWAY</div></header><section class="hero"><div class="intro"><div class="eyebrow">INTERNET CEPAT • BAYAR MUDAH</div><h1>Aktifkan WiFi<br><span>tanpa ribet.</span></h1><p>Pesan paket internet, bayar melalui QRIS, lalu akun WiFi diproses setelah pembayaran terverifikasi.</p><div class="features"><span>✓ QRIS</span><span>✓ Otomatis</span><span>✓ MikroTik</span></div></div><div class="panel"><h2>Pilih Paket WiFi</h2><div id="plans">Memuat...</div><form id="checkout"><input id="name" placeholder="Nama pelanggan" required><input id="phone" placeholder="Nomor WhatsApp"><select id="method"><option value="QRIS">QRIS</option></select><div class="qris-box"><div><b>QRIS PEMBAYARAN</b><small>Scan QRIS ini setelah tagihan dibuat.</small></div><img src="/Qris.jpg" alt="QRIS Pembayaran"></div><button>BAYAR SEKARANG <b>→</b></button></form><div id="result"></div></div></section></main><script src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07152f">
+<title>WiFi Gateway — Internet Cepat, Bayar Mudah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-grid"></div><div class="glow glow-a"></div><div class="glow glow-b"></div>
+<header class="nav">
+  <a class="brand" href="#"><span class="brand-mark">⌁</span><span>WiFi<span class="accent">Gateway</span><small>Internet Cepat, Hidup Lebih Praktis</small></span></a>
+  <nav><a href="#beranda" class="active">Beranda</a><a href="#paket">Paket</a><a href="#cara">Cara Bayar</a><a href="#status">Status</a></nav>
+  <button class="nav-btn" onclick="scrollToPlans()">Mulai Sekarang <span>→</span></button>
+  <button class="menu" onclick="document.body.classList.toggle('menu-open')">☰</button>
+</header>
+
+<main>
+<section id="beranda" class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow"><i></i> WIFI PAYMENT GATEWAY</div>
+    <h1>Akses Internet<br><span>Mudah & Cepat</span></h1>
+    <p>Beli paket WiFi favorit Anda, bayar dengan QRIS, dan nikmati koneksi internet tanpa ribet. Aktivasi akun dilakukan otomatis setelah pembayaran terverifikasi.</p>
+    <div class="hero-actions"><button class="primary" onclick="scrollToPlans()">Pilih Paket <span>→</span></button><button class="ghost" onclick="document.getElementById('cara').scrollIntoView({behavior:'smooth'})"><span class="play">▶</span> Lihat Cara Bayar</button></div>
+    <div class="trust"><div><b>⌁</b><span>Pembayaran<br><strong>QRIS</strong></span></div><div><b>⚡</b><span>Aktivasi<br><strong>Otomatis</strong></span></div><div><b>◉</b><span>Akses Cepat<br><strong>& Stabil</strong></span></div><div><b>✓</b><span>100% Aman<br><strong>& Terpercaya</strong></span></div></div>
+  </div>
+  <div class="hero-visual">
+    <div class="router-card"><div class="router-light"></div><div class="router"><div class="antenna a1"></div><div class="antenna a2"></div><div class="antenna a3"></div><div class="router-top"><div class="wifi-symbol">⌁</div></div><div class="router-front"><span></span><span></span><span></span><span></span><span></span></div></div><div class="float-card card-speed"><b>⚡</b><span><strong>10 Mbps</strong><small>Kecepatan stabil</small></span></div><div class="float-card card-online"><i></i><span><strong>WiFi Aktif</strong><small>Terhubung otomatis</small></span></div></div>
+  </div>
+</section>
+
+<section class="device-strip"><span>Tersedia di:</span><b>▣ Laptop</b><b>▯ Smartphone</b><b>▣ Tablet</b><b>▱ Smart TV</b><b>◈ Game Console</b></section>
+
+<section id="paket" class="section">
+  <div class="section-head"><div><div class="eyebrow">PILIH SESUAI KEBUTUHAN</div><h2>Paket Internet</h2><p>Paket demo berikut bisa langsung dicoba tanpa transaksi sungguhan.</p></div><div class="mini-note">● Mode Demo Aktif</div></div>
+  <div class="plans">
+    <article class="plan" data-plan="WiFi 1 Hari" data-price="5000" onclick="selectPlan(this)"><div class="plan-top"><span class="plan-icon">⌁</span><span class="tag blue">Harian</span></div><h3>WiFi 1 Hari</h3><div class="price">Rp 5.000</div><ul><li>✓ Masa aktif 1 hari</li><li>✓ Kuota tanpa batas</li><li>✓ Kecepatan hingga 10 Mbps</li></ul><button>Pilih Paket <span>→</span></button></article>
+    <article class="plan featured" data-plan="WiFi 3 Hari" data-price="12000" onclick="selectPlan(this)"><div class="plan-top"><span class="plan-icon">⌁</span><span class="tag green">Hemat</span></div><h3>WiFi 3 Hari</h3><div class="price">Rp 12.000</div><ul><li>✓ Masa aktif 3 hari</li><li>✓ Kuota tanpa batas</li><li>✓ Kecepatan hingga 10 Mbps</li></ul><button>Pilih Paket <span>→</span></button></article>
+    <article class="plan" data-plan="WiFi 7 Hari" data-price="20000" onclick="selectPlan(this)"><div class="plan-top"><span class="plan-icon">⌁</span><span class="tag pink">Populer</span></div><h3>WiFi 7 Hari</h3><div class="price">Rp 20.000</div><ul><li>✓ Masa aktif 7 hari</li><li>✓ Kuota tanpa batas</li><li>✓ Kecepatan hingga 20 Mbps</li></ul><button>Pilih Paket <span>→</span></button></article>
+    <article class="plan" data-plan="WiFi 30 Hari" data-price="50000" onclick="selectPlan(this)"><div class="plan-top"><span class="plan-icon">⌁</span><span class="tag gold">Terbaik</span></div><h3>WiFi 30 Hari</h3><div class="price">Rp 50.000</div><ul><li>✓ Masa aktif 30 hari</li><li>✓ Kuota tanpa batas</li><li>✓ Kecepatan hingga 30 Mbps</li></ul><button>Pilih Paket <span>→</span></button></article>
+  </div>
+</section>
+
+<section id="cara" class="how section">
+  <div class="section-head center"><div><div class="eyebrow">SEMUANYA OTOMATIS</div><h2>Bagaimana Cara Kerjanya?</h2><p>Alurnya sederhana. Dalam versi nyata, Tripay dan MikroTik akan bekerja di belakang layar.</p></div></div>
+  <div class="steps"><div class="step"><div class="step-no">01</div><div class="step-icon">▣</div><h3>Pilih Paket</h3><p>Pilih durasi internet yang sesuai kebutuhan Anda.</p></div><div class="line"></div><div class="step"><div class="step-no">02</div><div class="step-icon">⌁</div><h3>Bayar QRIS</h3><p>Scan QRIS menggunakan aplikasi pembayaran pilihan Anda.</p></div><div class="line"></div><div class="step"><div class="step-no">03</div><div class="step-icon">✓</div><h3>Verifikasi Otomatis</h3><p>Sistem menerima notifikasi pembayaran secara otomatis.</p></div><div class="line"></div><div class="step"><div class="step-no">04</div><div class="step-icon">◉</div><h3>WiFi Aktif</h3><p>Username dan password langsung siap digunakan.</p></div></div>
+</section>
+
+<section id="status" class="status-section section"><div class="status-card"><div class="status-copy"><div class="eyebrow">REAL-TIME TRACKING</div><h2>Pantau Status Pembayaran</h2><p>Setelah membayar, pelanggan dapat melihat proses verifikasi dan aktivasi WiFi dari satu halaman.</p><button class="ghost light" onclick="openStatus()">Lihat Contoh Status <span>→</span></button></div><div class="timeline-preview"><div class="tl done"><b>✓</b><span><strong>Pesanan dibuat</strong><small>Selesai</small></span></div><div class="tl done"><b>✓</b><span><strong>Pembayaran terverifikasi</strong><small>Selesai</small></span></div><div class="tl active"><b>⚡</b><span><strong>Aktivasi WiFi</strong><small>Diproses otomatis</small></span></div><div class="tl"><b>⌁</b><span><strong>Akun WiFi siap</strong><small>Menunggu aktivasi</small></span></div></div></div></section>
+</main>
+
+<footer><div class="brand"><span class="brand-mark">⌁</span><span>WiFi<span class="accent">Gateway</span><small>Payment Gateway</small></span></div><span>© 2026 WiFi Gateway • Demo Interface</span></footer>
+
+<div id="checkoutModal" class="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button><div class="modal-head"><div class="modal-icon">⌁</div><div><div class="eyebrow">CHECKOUT DEMO</div><h2>Lengkapi Data</h2></div></div><div class="selected-summary"><span id="summaryPlan">WiFi 1 Hari</span><strong id="summaryPrice">Rp 5.000</strong></div><label>Nama Pelanggan<input id="customerName" placeholder="Contoh: Budi Santoso"></label><label>Nomor WhatsApp<input id="customerPhone" placeholder="08xxxxxxxxxx"></label><button class="primary full" onclick="startPayment()">Lanjut ke Pembayaran <span>→</span></button><small class="demo-warning">ⓘ Ini hanya simulasi. Tidak ada uang yang ditagihkan.</small></div></div>
+
+<div id="paymentModal" class="modal"><div class="modal-box payment-box"><button class="close" onclick="closePayment()">×</button><div class="payment-top"><span class="back" onclick="backToCheckout()">← Kembali</span><span class="timer">◷ 14:52</span></div><div class="eyebrow">PEMBAYARAN QRIS</div><h2>Scan untuk Membayar</h2><div class="payment-grid"><div class="fake-qris"><div class="qris-logo">QRIS</div><div class="qr"><span>▦</span></div><b id="payPrice">Rp 5.000</b><small>Gunakan aplikasi pembayaran Anda</small></div><div class="invoice"><span>No. Transaksi</span><b id="invoiceNo">WIFI-DEMO-001</b><span>Paket</span><b id="invoicePlan">WiFi 1 Hari</b><span>Total</span><b id="invoiceTotal">Rp 5.000</b><button class="primary full" onclick="simulatePaid()">Simulasikan Pembayaran Berhasil ✓</button></div></div><small class="demo-warning">ⓘ Tombol simulasi menggantikan webhook Tripay pada tahap demo.</small></div></div>
+
+<div id="successModal" class="modal"><div class="success-box"><div class="confetti">✦　✧　✦</div><div class="success-icon">✓</div><div class="eyebrow">PEMBAYARAN BERHASIL</div><h2>WiFi Anda Aktif!</h2><p>Pembayaran terverifikasi. Pada sistem nyata, akun ini akan dibuat otomatis di MikroTik.</p><div class="credential"><div><small>USERNAME</small><b id="demoUser">WIFI8F32AB</b></div><button onclick="copyText('demoUser')">⧉</button><div><small>PASSWORD</small><b id="demoPass">X7kP92mQ</b></div><button onclick="copyText('demoPass')">⧉</button><div><small>AKTIF SAMPAI</small><b id="demoExpiry">25 Sep 2026 19:45</b></div></div><button class="primary full" onclick="closeSuccess()">Hubungkan ke WiFi <span>→</span></button><button class="ghost full" onclick="closeSuccess()">Kembali ke Beranda</button></div></div>
+
+<script src="app.js"></script>
+</body></html>
