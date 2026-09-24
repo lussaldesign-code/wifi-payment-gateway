@@ -86,9 +86,18 @@ function goSection(id){
 }
 
 function setActiveNav(id){
-  document.querySelectorAll(".nav nav a").forEach(a=>{
+  const nav=document.querySelector(".nav nav");
+  const links=[...document.querySelectorAll(".nav nav a")];
+  links.forEach(a=>{
     a.classList.toggle("active",(a.getAttribute("href")||"")==="#"+id);
   });
+  const active=links.find(a=>(a.getAttribute("href")||"")==="#"+id);
+  if(nav && active){
+    const navRect=nav.getBoundingClientRect();
+    const rect=active.getBoundingClientRect();
+    nav.style.setProperty("--nav-indicator-x",(rect.left-navRect.left)+"px");
+    nav.style.setProperty("--nav-indicator-w",rect.width+"px");
+  }
 }
 
 document.querySelectorAll(".nav nav a").forEach(a=>{
@@ -125,4 +134,10 @@ window.addEventListener("scroll",()=>{
 
 window.addEventListener("load",()=>{
   setActiveNav("beranda");
+  setTimeout(()=>setActiveNav("beranda"),50);
+});
+
+window.addEventListener("resize",()=>{
+  const active=document.querySelector(".nav nav a.active");
+  if(active) setActiveNav((active.getAttribute("href")||"#beranda").slice(1));
 });
