@@ -37,11 +37,19 @@ app.post("/api/checkout",async(req,res)=>{
   if(!plan)return res.status(400).json({success:false,message:"Paket tidak ditemukan"});
   const merchantRef=ref();
   db.prepare("INSERT INTO transactions(merchant_ref,plan_id,customer_name,customer_phone,amount,payment_method) VALUES(?,?,?,?,?,?)").run(merchantRef,plan.id,customerName||"Pelanggan",customerPhone||"",plan.price,method||process.env.TRIPAY_CHANNEL||"QRIS");
-  if(!process.env.TRIPAY_API_KEY)return res.json({success:true,demo:true,data:{merchant_ref:merchantRef,status:"UNPAID"}});
+  if(!process.env.TRIPAY_API_KEY)return res.json({success:true,demo:true,data:{merchant_ref:merchantRef,status:"UNPAID",qris_url:"/Qris.jpg"}});
   const p=await createTransaction({merchantRef,amount:plan.price,method:method||process.env.TRIPAY_CHANNEL||"QRIS",customerName,customerPhone,orderItems:[{sku:"WIFI-"+plan.id,name:plan.name,price:plan.price,quantity:1}]});
   db.prepare("UPDATE transactions SET reference=?,checkout_url=?,payment_method=? WHERE merchant_ref=?").run(p.reference,p.checkout_url,p.payment_method,merchantRef);
   res.json({success:true,data:{merchant_ref:merchantRef,reference:p.reference,checkout_url:p.checkout_url,payment_method:p.payment_method}});
  }catch(e){res.status(500).json({success:false,message:e.message});}
+});
+
+app.post("/api/payment/:merchantRef/claim",(req,res)=>{
+ const tx=db.prepare("SELECT * FROM transactions WHERE merchant_ref=?").get(req.params.merchantRef);
+ if(!tx)return res.status(404).json({success:false,message:"Invoice tidak ditemukan"});
+ if(tx.status==="PAID")return res.json({success:true,message:"Pembayaran sudah terverifikasi"});
+ db.prepare("UPDATE transactions SET status='CUSTOMER_CLAIMED' WHERE merchant_ref=? AND status NOT IN ('PAID')").run(req.params.merchantRef);
+ res.json({success:true,message:"Konfirmasi diterima. Menunggu verifikasi pembayaran."});
 });
 
 app.post("/api/webhook/tripay",async(req,res)=>{
