@@ -11,3 +11,18 @@ function backToCheckout(){document.getElementById("paymentModal").classList.remo
 function closeSuccess(){document.getElementById("successModal").classList.remove("show")}
 async function copyText(id){try{await navigator.clipboard.writeText(document.getElementById(id).textContent)}catch(e){}}
 document.querySelectorAll(".plan").forEach(el=>el.addEventListener("mouseenter",()=>el.classList.add("hovered")));document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+function goSection(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const header=document.querySelector(".nav");
+  const offset=(header?header.offsetHeight:78)+8;
+  const y=el.getBoundingClientRect().top+window.pageYOffset-offset;
+  window.scrollTo({top:y,behavior:"smooth"});
+  document.body.classList.remove("menu-open");
+}
+document.querySelectorAll(".nav nav a").forEach(a=>{
+  a.addEventListener("click",function(e){
+    const id=(this.getAttribute("href")||"").replace("#","");
+    if(document.getElementById(id)){e.preventDefault();goSection(id);}
+  });
+});
