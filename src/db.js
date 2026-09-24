@@ -1,0 +1,11 @@
+import Database from "better-sqlite3";
+import fs from "node:fs";
+import path from "node:path";
+import "dotenv/config";
+const file=process.env.DB_FILE||"./data/wifi.sqlite";
+fs.mkdirSync(path.dirname(file),{recursive:true});
+const db=new Database(file);
+db.pragma("journal_mode=WAL");
+db.exec("CREATE TABLE IF NOT EXISTS plans(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,price INTEGER NOT NULL,duration_minutes INTEGER NOT NULL,hotspot_profile TEXT DEFAULT 'default',active INTEGER DEFAULT 1); CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT,merchant_ref TEXT UNIQUE NOT NULL,reference TEXT,plan_id INTEGER NOT NULL,customer_name TEXT,customer_phone TEXT,status TEXT DEFAULT 'UNPAID',amount INTEGER NOT NULL,payment_method TEXT,checkout_url TEXT,username TEXT,password TEXT,expires_at TEXT,router_status TEXT,raw_callback TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP,paid_at TEXT); CREATE TABLE IF NOT EXISTS webhook_events(id INTEGER PRIMARY KEY AUTOINCREMENT,reference TEXT,event TEXT,payload TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP);");
+if(db.prepare("SELECT COUNT(*) c FROM plans").get().c===0) db.prepare("INSERT INTO plans(name,price,duration_minutes,hotspot_profile) VALUES(?,?,?,?)").run("WiFi 1 Hari",5000,1440,"default");
+export default db;
