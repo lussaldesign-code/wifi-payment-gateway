@@ -11,7 +11,7 @@ Deno.serve(async(req)=>{
   const expected=await hmac(privateKey,raw); if(received.length!==expected.length)return json({success:false,message:"Invalid signature"},403);
   let diff=0;for(let i=0;i<expected.length;i++)diff|=received.charCodeAt(i)^expected.charCodeAt(i);if(diff!==0)return json({success:false,message:"Invalid signature"},403);
   const payload=JSON.parse(raw);const secret=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")||JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS")||"{}").default;const supabase=createClient(Deno.env.get("SUPABASE_URL")!,secret);
-  const {data:tx}=await supabase.from("transactions").select("id,merchant_ref,plan_id,amount,status").eq("merchant_ref",payload.merchant_ref).single();
+  const {data:tx}=await supabase.from("transactions").select("id,merchant_ref,plan_id,amount,status,external_reference,external_system,callback_url").eq("merchant_ref",payload.merchant_ref).single();
   if(!tx)return json({success:false,message:"Transaction not found"},404);
   await supabase.from("webhook_logs").insert({provider:"tripay",event_type:payload.status||payload.event||"callback",event_id:payload.reference||payload.merchant_ref,signature_valid:true,payload,processed:false});
   if(payload.amount&&Number(payload.amount)!==Number(tx.amount))throw new Error("Nominal pembayaran tidak cocok");
@@ -23,6 +23,18 @@ Deno.serve(async(req)=>{
   const {data:account,error:accountError}=await supabase.from("wifi_accounts").insert({transaction_id:tx.id,username,password,hotspot_profile:plan.hotspot_profile,expires_at:expires,status:"PENDING"}).select("id").single();
   if(accountError&&accountError.code!=="23505")throw accountError;if(!account)return json({success:true,duplicate:true});
   const {error:jobError}=await supabase.from("activation_jobs").insert({wifi_account_id:account.id,status:"PENDING",attempts:0});if(jobError)throw jobError;
+  if(tx.callback_url&&tx.external_reference){
+    try{
+      const callbackSecret=Deno.env.get("PHPNUXBILL_CALLBACK_SECRET")||"";
+      const callbackBody=JSON.stringify({
+        event:"payment.paid",external_reference:tx.external_reference,external_system:tx.external_system||"phpnuxbill",
+        merchant_ref:tx.merchant_ref,reference:payload.reference||null,status:"PAID",amount:Number(tx.amount),
+        paid_at:new Date().toISOString(),wifi_username:username,wifi_password:password,expires_at:expires
+      });
+      const signature=callbackSecret?await hmac(callbackSecret,callbackBody):"";
+      await fetch(tx.callback_url,{method:"POST",headers:{"Content-Type":"application/json","X-Diconnect-Signature":signature},body:callbackBody});
+    }catch(callbackError){await supabase.from("webhook_logs").insert({provider:"phpnuxbill",event_type:"callback_error",event_id:tx.external_reference,signature_valid:true,payload:{error:String(callbackError)},processed:false,error_message:String(callbackError)})}
+  }
   return json({success:true,activation:"queued"});
  }catch(e){return json({success:false,message:e instanceof Error?e.message:"Webhook error"},500)}
 });
