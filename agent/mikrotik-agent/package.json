@@ -1,0 +1,1 @@
+{"name":"wifi-mikrotik-agent","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node agent.js","dev":"node --watch agent.js"},"dependencies":{"dotenv":"^16.4.7"}}
